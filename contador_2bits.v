@@ -47,6 +47,9 @@ module contador_2bits (
     xor U_COUNT1_XOR (count_next[1], count_reg[1], count0_and_enable);
 
     // Reset: quando rst = 0 OU reset_condition = 1
+    // O flip-flop D usa reset ativo baixo, então:
+    // - rst = 0 (reset ativo) OU reset_condition = 1 → reset_final = 0
+    // - rst = 1 (sem reset) E reset_condition = 0 → reset_final = 1
     wire reset_final;
     or U_RESET_FINAL (reset_final, rst, reset_condition);
     
