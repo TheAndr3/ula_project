@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(10M50DCF484) Path("/home/aluno/Documentos/ft_quartus/ula_project-tenorio(0)/output_files/") File("PBL1.sof") MfrSpec(OpMask(1));
+		Device PartName(10M50DCF484) Path("/home/aluno/Downloads/ula_project-main/output_files/") File("PBL1.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

@@ -51,4 +51,3 @@ module contador_1bit (
     buf U_FULL (full, Q);          // Cheio quando Q=1
 
 endmodule
-

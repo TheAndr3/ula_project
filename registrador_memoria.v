@@ -14,9 +14,9 @@ module registrador_memoria (
     // Registrador de 8 bits para armazenar o último resultado
     registrador_8bits U_REG_MEMORIA (
         .D(resultado_entrada),
-        .CLK(clk),
-        .RST(rst),
-        .EN(carregar),
+        .clk(clk),
+        .rst(rst),
+        .load(carregar),
         .Q(memoria_saida)
     );
 

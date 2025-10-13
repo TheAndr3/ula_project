@@ -1,3 +1,4 @@
+
 // Módulo principal da calculadora RPN com sistema de clock real
 // Implementação puramente estrutural
 
@@ -18,18 +19,14 @@ module calculadora_rpn_completa (
 );
 
     // Mapeamento de entradas
-    wire [7:0] entrada_numero = SW[7:0];        // Entrada de número de 8 bits (compartilhada)
-    wire [7:0] operacao = SW[7:0];              // Código da operação de 8 bits (compartilhada)
-    wire [1:0] base_exibicao = {SW[9], SW[8]};  // Base de exibição (00=dec, 01=hex, 10=oct)
-    wire entrada_botao = KEY[0];                 // Botão para entrada (A, B ou operação)
-    wire reset_global = KEY[1];                  // Reset global
+    wire [7:0] entrada_numero = SW[7:0];        // Entrada de número de 8 bits
+    wire [7:0] operacao = SW[7:0];              // Código da operação de 8 bits (mesmo que entrada_numero)
+    wire [1:0] base_exibicao = SW[9:8];         // Base de exibição (00=dec, 01=hex, 10=oct)
+    wire push_pilha = KEY[0];                   // KEY[0] para dar push na pilha
+    wire executar_operacao = KEY[1];            // KEY[1] para executar operação
     
-    // Contador de controle de entrada
-    wire [1:0] contador_entrada;                 // Contador: 00=A, 01=B, 10=op, 11=reset
-    wire enable_contador;                        // Enable do contador
-    
-    // Sinais de controle de entrada
-    wire entrada_numero_a, entrada_numero_b, entrada_operacao, executar_operacao;
+    // Sinais de controle de entrada simplificados
+    wire entrada_numero_a, entrada_numero_b, entrada_operacao;
     
     // Código interno da operação (3 bits)
     wire [2:0] codigo_operacao_interno;
@@ -71,43 +68,27 @@ module calculadora_rpn_completa (
 
     // Reset (ativo baixo)
     not U_RST (rst, gnd);
-    
-    // Enable do contador: entrada_botao pressionado
-    buf U_ENABLE_CONTADOR (enable_contador, entrada_botao);
 
-    // Contador de controle de entrada
-    contador_2bits U_CONTADOR_ENTRADA (
-        .clk(CLOCK_50),
-        .rst(reset_global),
-        .enable(enable_contador),
-        .count(contador_entrada)
-    );
-
-    // Decodificador de operações
-    decodificador_operacoes U_DECOD_OPERACOES (
-        .operacao_8bits(operacao),
-        .codigo_operacao(codigo_operacao_interno)
-    );
-
-    // Controle de entrada baseado no contador
-    controle_entrada U_CONTROLE_ENTRADA (
+    // Controle de entrada simplificado
+    controle_entrada_simples U_CONTROLE_ENTRADA (
         .entrada_numero(entrada_numero),
-        .operacao(codigo_operacao_interno),
-        .contador_entrada(contador_entrada),
-        .entrada_botao(entrada_botao),
+        .push_pilha(push_pilha),
+        .executar_operacao(executar_operacao),
+        .numero_para_pilha(entrada_numero),
+        .codigo_operacao(codigo_operacao_interno),
         .entrada_numero_a(entrada_numero_a),
         .entrada_numero_b(entrada_numero_b),
         .entrada_operacao(entrada_operacao),
-        .executar_operacao(executar_operacao)
+        .executar(executar_operacao)
     );
 
     // Controle de clock
     controle_clock U_CONTROLE_CLK (
         .clk_in(CLOCK_50),
         .rst(rst),
-        .entrada_numero(entrada_botao),
-        .entrada_operacao(entrada_botao),
-        .executar(gnd),
+        .entrada_numero(push_pilha),
+        .entrada_operacao(push_pilha),
+        .executar(executar_operacao),
         .clk_out(clk_sync),
         .clk_numero(clk_numero),
         .clk_operacao(clk_operacao),
@@ -142,20 +123,18 @@ module calculadora_rpn_completa (
         .executar(executar_operacao),
         .clk(clk_sync),
         .rst(rst),
-        .carregar_memoria(),
+        .carregar_memoria(gnd),
         .valor_memoria(valor_memoria),
         .resultado_final(resultado_memoria)
     );
 
-    // Seleção do valor para exibição - sempre mostrar resultado da ULA
-    buf U_VALOR_EXIBICAO0 (valor_exibicao[0], resultado_ula[0]);
-    buf U_VALOR_EXIBICAO1 (valor_exibicao[1], resultado_ula[1]);
-    buf U_VALOR_EXIBICAO2 (valor_exibicao[2], resultado_ula[2]);
-    buf U_VALOR_EXIBICAO3 (valor_exibicao[3], resultado_ula[3]);
-    buf U_VALOR_EXIBICAO4 (valor_exibicao[4], resultado_ula[4]);
-    buf U_VALOR_EXIBICAO5 (valor_exibicao[5], resultado_ula[5]);
-    buf U_VALOR_EXIBICAO6 (valor_exibicao[6], resultado_ula[6]);
-    buf U_VALOR_EXIBICAO7 (valor_exibicao[7], resultado_ula[7]);
+    // Display de calculadora - mostra número digitando ou resultado
+    display_calculadora U_DISPLAY_CALCULADORA (
+        .numero_digitando(entrada_numero),
+        .resultado_ula(resultado_ula),
+        .executar_operacao(executar_operacao),
+        .valor_exibicao(valor_exibicao)
+    );
 
     // Conversor de bases
     conversor_bases U_CONVERSOR (
@@ -164,15 +143,14 @@ module calculadora_rpn_completa (
         .HEX0(HEX0),
         .HEX1(HEX1),
         .HEX2(HEX2),
-        .HEX3(HEX3)
+        .HEX3(HEX3),
+        .HEX4(HEX4)
     );
 
-    // Display da operação
-    operacao_7seg U_OP_DISPLAY (
-        .seletor(codigo_operacao_interno),
-        .HEX5(HEX4)
-    );
+    // Display HEX4 agora mostra número (não operação)
+    // Conectado diretamente ao conversor de bases
 
+		
     // Display da base
     base_7seg U_BASE_DISPLAY (
         .seletor(base_exibicao),
@@ -180,15 +158,15 @@ module calculadora_rpn_completa (
     );
 
     // LEDs indicadores
-    buf U_LED0 (LEDR[0], contador_entrada[0]);  // Bit menos significativo do contador
-    buf U_LED1 (LEDR[1], contador_entrada[1]);  // Bit mais significativo do contador
-    buf U_LED2 (LEDR[2], zero);
-    buf U_LED3 (LEDR[3], overflow);
-    buf U_LED4 (LEDR[4], carry_out);
-    buf U_LED5 (LEDR[5], erro);
-    buf U_LED6 (LEDR[6], pilha_vazia);
-    buf U_LED7 (LEDR[7], pilha_cheia);
-    buf U_LED8 (LEDR[8], entrada_numero_a);     // Indica entrada do número A
-    buf U_LED9 (LEDR[9], entrada_operacao);     // Indica entrada da operação
+    buf U_LED0 (LEDR[0], zero);                 // Flag Zero
+    buf U_LED1 (LEDR[1], overflow);             // Flag Overflow
+    buf U_LED2 (LEDR[2], carry_out);            // Flag Carry Out
+    buf U_LED3 (LEDR[3], erro);                 // Flag Erro
+    buf U_LED4 (LEDR[4], pilha_vazia);          // Pilha Vazia
+    buf U_LED5 (LEDR[5], pilha_cheia);          // Pilha Cheia
+    buf U_LED6 (LEDR[6], entrada_numero_a);     // Indica estágio A (contador 00)
+    buf U_LED7 (LEDR[7], entrada_numero_b);     // Indica estágio B (contador 01)
+    buf U_LED8 (LEDR[8], entrada_operacao);     // Indica estágio Operação (contador 10)
+    buf U_LED9 (LEDR[9], executar_operacao);    // Indica estágio Executar (contador 11)
 
 endmodule

@@ -1,5 +1,5 @@
 Assembler report for PBL1
-Fri Sep 19 14:12:45 2025
+Fri Oct 10 15:00:55 2025
 Quartus Prime Version 23.1std.0 Build 991 11/28/2023 SC Lite Edition
 
 
@@ -38,9 +38,9 @@ https://fpgasoftware.intel.com/eula.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Fri Sep 19 14:12:45 2025 ;
+; Assembler Status      ; Successful - Fri Oct 10 15:00:55 2025 ;
 ; Revision Name         ; PBL1                                  ;
-; Top-level Entity Name ; ULA_TOP                               ;
+; Top-level Entity Name ; calculadora_rpn_completa              ;
 ; Family                ; MAX 10                                ;
 ; Device                ; 10M50DCF484C7G                        ;
 +-----------------------+---------------------------------------+
@@ -53,13 +53,13 @@ https://fpgasoftware.intel.com/eula.
 +--------+---------+---------------+
 
 
-+--------------------------------------------------------------------------------+
-; Assembler Generated Files                                                      ;
-+--------------------------------------------------------------------------------+
-; File Name                                                                      ;
-+--------------------------------------------------------------------------------+
-; /home/aluno/Documentos/ft_quartus/ula_project-tenorio(0)/output_files/PBL1.sof ;
-+--------------------------------------------------------------------------------+
++--------------------------------------------------------------+
+; Assembler Generated Files                                    ;
++--------------------------------------------------------------+
+; File Name                                                    ;
++--------------------------------------------------------------+
+; /home/aluno/Downloads/ula_project-main/output_files/PBL1.sof ;
++--------------------------------------------------------------+
 
 
 +------------------------------------+
@@ -67,8 +67,8 @@ https://fpgasoftware.intel.com/eula.
 +----------------+-------------------+
 ; Option         ; Setting           ;
 +----------------+-------------------+
-; JTAG usercode  ; 0x00297F7A        ;
-; Checksum       ; 0x00297F7A        ;
+; JTAG usercode  ; 0x00298AD1        ;
+; Checksum       ; 0x00298AD1        ;
 +----------------+-------------------+
 
 
@@ -78,15 +78,15 @@ https://fpgasoftware.intel.com/eula.
 Info: *******************************************************************
 Info: Running Quartus Prime Assembler
     Info: Version 23.1std.0 Build 991 11/28/2023 SC Lite Edition
-    Info: Processing started: Fri Sep 19 14:12:43 2025
+    Info: Processing started: Fri Oct 10 15:00:54 2025
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off PBL1 -c PBL1
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 373 megabytes
-    Info: Processing ended: Fri Sep 19 14:12:45 2025
-    Info: Elapsed time: 00:00:02
+    Info: Peak virtual memory: 379 megabytes
+    Info: Processing ended: Fri Oct 10 15:00:55 2025
+    Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 
 

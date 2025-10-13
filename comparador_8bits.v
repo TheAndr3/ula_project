@@ -97,7 +97,7 @@ module comparador_8bits (
     or  U_LT3 (a_lt_bit[3], a_lt_bit[4], lt3_term2);
     
     // Bit 2
-    wire gt2_term1, gt2_term2, eq2_term1, eq2_term2, lt2_term1, lt2_term2;
+    wire gt2_term1, gt2_term2, eq2_term1, eq2_term2, lt2_term1, lt2_term2, lt2_term22;
     and U_GT2_1 (gt2_term1, a[2], b_not[2]);
     and U_GT2_2 (gt2_term2, a_eq_bit[3], gt2_term1);
     or  U_GT2 (a_gt_bit[2], a_gt_bit[3], gt2_term2);
@@ -121,8 +121,8 @@ module comparador_8bits (
     or  U_EQ1 (a_eq_bit[1], a_eq_bit[2], eq1_term2);
     
     and U_LT1_1 (lt1_term1, a_not[1], b[1]);
-    and U_LT1_2 (lt2_term2, a_eq_bit[2], lt1_term1);
-    or  U_LT1 (a_lt_bit[1], a_lt_bit[2], lt2_term2);
+    and U_LT1_2 (lt2_term22, a_eq_bit[2], lt1_term1);
+    or  U_LT1 (a_lt_bit[1], a_lt_bit[2], lt2_term22);
     
     // Bit 0 (menos significativo)
     wire gt0_term1, gt0_term2, eq0_term1, eq0_term2, lt0_term1, lt0_term2;

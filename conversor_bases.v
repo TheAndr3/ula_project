@@ -7,7 +7,8 @@ module conversor_bases (
     output wire [6:0] HEX0,             // Display unidade
     output wire [6:0] HEX1,             // Display dezena
     output wire [6:0] HEX2,             // Display centena
-    output wire [6:0] HEX3              // Display milhar (para hex)
+    output wire [6:0] HEX3,             // Display milhar (para hex)
+    output wire [6:0] HEX4              // Display adicional (desligado)
 );
 
     // Fios intermediários para conversões
@@ -106,7 +107,8 @@ module conversor_bases (
     decodificador_7seg U_DECOD_UNIDADE (.D(mux_unidade_out), .SEG(HEX0));
     decodificador_7seg U_DECOD_DEZENA (.D(mux_dezena_out), .SEG(HEX1));
     decodificador_7seg U_DECOD_CENTENA (.D(mux_centena_out), .SEG(HEX2));
-    // HEX3 sempre desligado (todos os segmentos em 1 para display de 7 segmentos)
+    
+    // HEX3 e HEX4 sempre desligados (todos os segmentos em 1 para display de 7 segmentos)
     buf U_HEX3_SEG0 (HEX3[0], vcc);
     buf U_HEX3_SEG1 (HEX3[1], vcc);
     buf U_HEX3_SEG2 (HEX3[2], vcc);
@@ -114,5 +116,13 @@ module conversor_bases (
     buf U_HEX3_SEG4 (HEX3[4], vcc);
     buf U_HEX3_SEG5 (HEX3[5], vcc);
     buf U_HEX3_SEG6 (HEX3[6], vcc);
+    
+    buf U_HEX4_SEG0 (HEX4[0], vcc);
+    buf U_HEX4_SEG1 (HEX4[1], vcc);
+    buf U_HEX4_SEG2 (HEX4[2], vcc);
+    buf U_HEX4_SEG3 (HEX4[3], vcc);
+    buf U_HEX4_SEG4 (HEX4[4], vcc);
+    buf U_HEX4_SEG5 (HEX4[5], vcc);
+    buf U_HEX4_SEG6 (HEX4[6], vcc);
 
 endmodule
